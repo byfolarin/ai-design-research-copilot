@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Product Research Copilot
 
-## Getting Started
+Describe a product or design problem and get a synthesized research report —
+product understanding, user journey, Mobbin-style patterns, Figma UX
+observations, recommendations, and action items — rendered in a live sandbox.
 
-First, run the development server:
+A split-pane app: a chat panel on the left, a dotted node-canvas "sandbox" on
+the right that fills with report panels you scroll through horizontally.
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Modes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Mock** (default): a sample report, so the app works with zero setup.
+- **Live**: real reports written by Claude (Opus 4.8) about your prompt.
 
-## Learn More
+Turn on live mode by adding a key in `.env.local`:
 
-To learn more about Next.js, take a look at the following resources:
+```
+ANTHROPIC_API_KEY=sk-ant-...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Optional live data sources
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Mobbin** — paste a Mobbin access token as `MOBBIN_MCP_TOKEN` to pull real
+  screens (with mobbin.com links) into reports.
+- **Figma** — add a Figma personal access token as `FIGMA_TOKEN` and include a
+  `figma.com/design/...` link in your prompt to ground UX observations in your
+  real frames.
 
-## Deploy on Vercel
+`.env.local` is git-ignored — your keys never get committed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16 · React 19 · Tailwind v4 · Anthropic SDK.
