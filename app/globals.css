@@ -1,8 +1,62 @@
 @import "tailwindcss";
 
+/* Manual dark mode driven by a `.dark` class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf9f5;
+  --foreground: #28261f;
+
+  --paper: #ffffff;
+  --cream: #f0eee6;
+
+  --ink: #28261f;
+  --ink-muted: #6e6d66;
+  --ink-faint: #9a988e;
+
+  --line: #e8e6dc;
+  --line-strong: #dcd9cc;
+
+  --accent: #c96442;
+  --accent-strong: #b0533a;
+  --accent-soft: #f4e7e0;
+
+  --canvas: #f3f1e9;
+  --dot: rgba(40, 38, 31, 0.13);
+  --scrollbar: rgba(40, 38, 31, 0.18);
+  --scrollbar-hover: rgba(40, 38, 31, 0.28);
+
+  --card-shadow:
+    0 1px 2px rgba(40, 38, 31, 0.04),
+    0 8px 24px -12px rgba(40, 38, 31, 0.08);
+}
+
+.dark {
+  --background: #16150f;
+  --foreground: #ece8df;
+
+  --paper: #211f18;
+  --cream: #1c1b14;
+
+  --ink: #ece8df;
+  --ink-muted: #a8a394;
+  --ink-faint: #76725f;
+
+  --line: #322f26;
+  --line-strong: #423e33;
+
+  --accent: #db8160;
+  --accent-strong: #ec9778;
+  --accent-soft: #35261f;
+
+  --canvas: #131209;
+  --dot: rgba(255, 255, 255, 0.07);
+  --scrollbar: rgba(255, 255, 255, 0.14);
+  --scrollbar-hover: rgba(255, 255, 255, 0.24);
+
+  --card-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 10px 30px -14px rgba(0, 0, 0, 0.6);
 }
 
 @theme inline {
@@ -10,17 +64,93 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-moderat-serif);
+
+  --color-paper: var(--paper);
+  --color-cream: var(--cream);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-rise: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-moderat-serif), ui-serif, Georgia, serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dotted node-canvas background for the sandbox pane */
+.dot-grid {
+  background-color: var(--canvas);
+  background-image: radial-gradient(
+    circle at center,
+    var(--dot) 1px,
+    transparent 1.5px
+  );
+  background-size: 22px 22px;
+  background-position: -11px -11px;
+}
+
+.serif {
+  font-family: var(--font-moderat-serif), ui-serif, Georgia, serif;
+}
+
+.card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--card-shadow);
+}
+
+::selection {
+  background: rgba(201, 100, 66, 0.22);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+  background-clip: padding-box;
 }
