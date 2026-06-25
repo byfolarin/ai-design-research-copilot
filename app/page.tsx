@@ -399,6 +399,74 @@ function ToolPill({
 
 /* ----------------------------- Sandbox ----------------------------- */
 
+function reportToMarkdown(r: ResearchReport): string {
+  const lines: string[] = [
+    `# Research Report: ${r.query}`,
+    ``,
+    `_Generated ${r.generatedAt} · ${r.mode === "live" ? "Live · Opus 4.8" : "Sample report"}_`,
+    ``,
+    `## Product understanding`,
+    r.productUnderstanding,
+    ``,
+    `## User journey`,
+    ...r.userJourney.map((s, i) => `${i + 1}. ${s}`),
+    ``,
+    `## Source plan`,
+    `- **Product:** ${r.sourcePlan.product}`,
+    `- **Problem:** ${r.sourcePlan.problem}`,
+    ...r.sourcePlan.decisions.map(
+      (d) => `- **${d.source}** — ${d.used ? "used" : "skipped"}: ${d.rationale}`,
+    ),
+    ``,
+    `## Executive summary`,
+    r.executiveSummary,
+    ``,
+    `### Key findings`,
+    ...r.keyFindings.map((f) => `- ${f}`),
+    ``,
+    `## Mobbin inspiration`,
+    ...r.mobbin.flatMap((m) => [
+      `### ${m.app} — ${m.pattern}`,
+      m.takeaway,
+      m.url ? `[View on Mobbin](${m.url})` : "",
+      `Tags: ${m.tags.join(", ")}`,
+      ``,
+    ]),
+    `## Figma insights (UX observations)`,
+    ...r.figma.flatMap((f) => [`### ${f.signal} (${f.confidence})`, f.detail, ``]),
+    `## UX recommendations`,
+    ...r.recommendations.map(
+      (rec) =>
+        `- **${rec.title}** _(impact: ${rec.impact}, effort: ${rec.effort})_ — ${rec.rationale}`,
+    ),
+    ``,
+    `## Action items`,
+    ...r.actionItems.map((a) => `- [ ] ${a.task} — ${a.owner} · ${a.eta}`),
+    ``,
+  ];
+  return lines.join("\n");
+}
+
+function downloadReport(report: ResearchReport) {
+  const slug =
+    report.query
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 50) || "research-report";
+  const blob = new Blob([reportToMarkdown(report)], {
+    type: "text/markdown;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${slug}.md`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function SandboxChrome({ report }: { report: ResearchReport | null }) {
   return (
     <div className="relative z-10 flex items-center justify-between border-b border-line bg-paper/70 px-4 py-2.5 backdrop-blur">
@@ -416,6 +484,7 @@ function SandboxChrome({ report }: { report: ResearchReport | null }) {
       <button
         type="button"
         disabled={!report}
+        onClick={() => report && downloadReport(report)}
         className="inline-flex items-center gap-1.5 rounded-md border border-line bg-paper px-2.5 py-1 text-[12px] font-medium text-ink-muted transition hover:border-line-strong hover:text-ink disabled:opacity-40"
       >
         <ExportIcon className="h-3.5 w-3.5" />
