@@ -19,10 +19,28 @@ const moderatSerif = Source_Serif_4({
   weight: ["400", "500", "600"],
 });
 
+const siteTitle = "AI Product Research Copilot";
+const siteDescription =
+  "Synthesize product research in seconds — competitive teardowns, Mobbin inspiration, Figma insights, and actionable UX recommendations, all in one report.";
+
 export const metadata: Metadata = {
-  title: "AI Product Research Copilot",
-  description:
-    "Synthesize product research in seconds — competitive teardowns, Mobbin inspiration, Figma insights, and actionable UX recommendations, all in one report.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      "https://ai-design-research-copilot.vercel.app",
+  ),
+  title: siteTitle,
+  description: siteDescription,
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    siteName: siteTitle,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
 };
 
 export default function RootLayout({
