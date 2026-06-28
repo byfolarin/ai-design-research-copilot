@@ -1,8 +1,13 @@
 # AI Product Research Copilot
 
+**▶ Live demo: [ai-design-research-copilot.vercel.app](https://ai-design-research-copilot.vercel.app)**
+
 Describe a product or design problem and get a synthesized research report —
 product understanding, user journey, Mobbin-style patterns, Figma UX
 observations, recommendations, and action items — rendered in a live sandbox.
+
+> The live demo runs in sample mode (no API key) so it's free and safe to share.
+> Add an `ANTHROPIC_API_KEY` to generate real reports — see [Modes](#modes) below.
 
 A split-pane app: a chat panel on the left, a dotted node-canvas "sandbox" on
 the right that fills with report panels you scroll through horizontally.
