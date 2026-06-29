@@ -525,6 +525,19 @@ function downloadReport(report: ResearchReport) {
 }
 
 function SandboxChrome({ report }: { report: ResearchReport | null }) {
+  const [copied, setCopied] = useState(false);
+
+  async function copyReport() {
+    if (!report) return;
+    try {
+      await navigator.clipboard.writeText(reportToMarkdown(report));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* clipboard unavailable — ignore */
+    }
+  }
+
   return (
     <div className="relative z-10 flex items-center justify-between border-b border-line bg-paper/70 px-4 py-2.5 backdrop-blur">
       <div className="flex items-center gap-3">
@@ -538,16 +551,49 @@ function SandboxChrome({ report }: { report: ResearchReport | null }) {
           {report ? "research-report.md" : "sandbox"}
         </div>
       </div>
-      <button
-        type="button"
-        disabled={!report}
-        onClick={() => report && downloadReport(report)}
-        className="inline-flex items-center gap-1.5 rounded-md border border-line bg-paper px-2.5 py-1 text-[12px] font-medium text-ink-muted transition hover:border-line-strong hover:text-ink disabled:opacity-40"
-      >
-        <ExportIcon className="h-3.5 w-3.5" />
-        Export
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={!report}
+          onClick={copyReport}
+          className="inline-flex items-center gap-1.5 rounded-md border border-line bg-paper px-2.5 py-1 text-[12px] font-medium text-ink-muted transition hover:border-line-strong hover:text-ink disabled:opacity-40"
+        >
+          {copied ? (
+            <CheckIcon className="h-3.5 w-3.5 text-emerald-500" />
+          ) : (
+            <CopyIcon className="h-3.5 w-3.5" />
+          )}
+          {copied ? "Copied" : "Copy"}
+        </button>
+        <button
+          type="button"
+          disabled={!report}
+          onClick={() => report && downloadReport(report)}
+          className="inline-flex items-center gap-1.5 rounded-md border border-line bg-paper px-2.5 py-1 text-[12px] font-medium text-ink-muted transition hover:border-line-strong hover:text-ink disabled:opacity-40"
+        >
+          <ExportIcon className="h-3.5 w-3.5" />
+          Export
+        </button>
+      </div>
     </div>
+  );
+}
+
+function CopyIcon({ className }: IconProps) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <rect x="9" y="9" width="11" height="11" rx="2" />
+      <path d="M5 15V5a2 2 0 0 1 2-2h10" />
+    </svg>
   );
 }
 
