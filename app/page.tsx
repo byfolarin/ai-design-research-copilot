@@ -376,17 +376,27 @@ function Composer({
 }) {
   const loading = phase === "loading";
   const disabled = loading || prompt.trim().length === 0;
+  const taRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-grow the textarea to fit its content (up to a max), then scroll.
+  useEffect(() => {
+    const ta = taRef.current;
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = `${Math.min(ta.scrollHeight, 160)}px`;
+  }, [prompt]);
 
   return (
     <div className="border-t border-line p-3">
       <div className="card rounded-[20px] p-2 transition focus-within:border-line-strong focus-within:shadow-[0_2px_4px_rgba(40,38,31,0.05),0_12px_30px_-14px_rgba(201,100,66,0.3)]">
         <textarea
+          ref={taRef}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={onKeyDown}
           rows={2}
           placeholder="Ask the copilot to research a product experience…"
-          className="block max-h-40 w-full resize-none bg-transparent px-2.5 pt-1.5 text-[15px] leading-6 text-ink placeholder:text-ink-faint focus:outline-none"
+          className="block max-h-40 w-full resize-none overflow-y-auto bg-transparent px-2.5 pt-1.5 text-[15px] leading-6 text-ink placeholder:text-ink-faint focus:outline-none"
         />
         <div className="flex items-center justify-between gap-2 px-1 pt-1">
           <div className="flex items-center gap-1.5">
