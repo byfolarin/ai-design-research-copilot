@@ -120,6 +120,15 @@ export default function Home() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden lg:flex-row">
+      {/* Screen-reader status announcements */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {phase === "loading"
+          ? "Researching, please wait."
+          : phase === "done"
+            ? "Your research report is ready."
+            : ""}
+      </p>
+
       {/* ---------------------- LEFT: chat panel ---------------------- */}
       <aside className="flex h-[52vh] w-full shrink-0 flex-col border-b border-line bg-paper lg:h-screen lg:w-[420px] lg:border-b-0 lg:border-r">
         <ChatHeader
