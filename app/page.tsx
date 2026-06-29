@@ -108,13 +108,23 @@ export default function Home() {
     }
   }
 
+  function resetSession() {
+    setMessages([]);
+    setReport(null);
+    setActiveStep(0);
+    setPrompt("");
+    setPhase("idle");
+  }
+
   const empty = messages.length === 0;
 
   return (
     <div className="flex h-screen flex-col overflow-hidden lg:flex-row">
       {/* ---------------------- LEFT: chat panel ---------------------- */}
       <aside className="flex h-[52vh] w-full shrink-0 flex-col border-b border-line bg-paper lg:h-screen lg:w-[420px] lg:border-b-0 lg:border-r">
-        <ChatHeader />
+        <ChatHeader
+          onNew={!empty && phase !== "loading" ? resetSession : undefined}
+        />
 
         <div
           ref={threadRef}
@@ -161,7 +171,7 @@ export default function Home() {
 
 /* --------------------------- Left panel ---------------------------- */
 
-function ChatHeader() {
+function ChatHeader({ onNew }: { onNew?: () => void }) {
   return (
     <header className="flex items-center justify-between border-b border-line px-4 py-3.5">
       <div className="flex items-center gap-2.5">
@@ -174,16 +184,44 @@ function ChatHeader() {
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <span className="hidden items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-[11px] text-ink-muted sm:flex">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        {onNew ? (
+          <button
+            type="button"
+            onClick={onNew}
+            className="inline-flex items-center gap-1 rounded-full border border-line bg-paper px-2.5 py-1 text-[11px] font-medium text-ink-muted transition hover:border-line-strong hover:text-ink"
+          >
+            <PlusIcon className="h-3 w-3" />
+            New
+          </button>
+        ) : (
+          <span className="hidden items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-[11px] text-ink-muted sm:flex">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            </span>
+            Connected
           </span>
-          Connected
-        </span>
+        )}
         <ThemeToggle />
       </div>
     </header>
+  );
+}
+
+function PlusIcon({ className }: IconProps) {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M12 5v14M5 12h14" />
+    </svg>
   );
 }
 
