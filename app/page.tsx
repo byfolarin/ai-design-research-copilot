@@ -391,6 +391,7 @@ function Composer({
       <div className="card rounded-[20px] p-2 transition focus-within:border-line-strong focus-within:shadow-[0_2px_4px_rgba(40,38,31,0.05),0_12px_30px_-14px_rgba(201,100,66,0.3)]">
         <textarea
           ref={taRef}
+          autoFocus
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={onKeyDown}
