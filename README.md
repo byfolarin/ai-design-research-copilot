@@ -12,6 +12,29 @@ observations, recommendations, and action items — rendered in a live sandbox.
 A split-pane app: a chat panel on the left, a dotted node-canvas "sandbox" on
 the right that fills with report panels you scroll through horizontally.
 
+## Features
+
+- **Reasoning-first pipeline** — builds a mental model of the product, then
+  decides which sources (Figma, Mobbin, the prompt) actually serve the question.
+- **Structured, typed reports** — product understanding, user journey, UX
+  observations, real-world patterns, prioritized recommendations, action items.
+- **Live data, optional** — pulls real Mobbin screens (with links) and reads
+  real Figma frames when tokens are provided; reasons from knowledge otherwise.
+- **Export & copy** — download any report as Markdown or copy it to the clipboard.
+- **Light / dark**, keyboard-accessible, reduced-motion aware, and social-preview ready.
+
+## How it works
+
+1. You describe a product or design problem (optionally with a Figma link).
+2. `POST /api/research` runs the copilot: it plans which sources to use, gathers
+   context from each, then asks Claude (Opus 4.8, structured outputs) to
+   synthesize a typed report.
+3. The report streams into the sandbox as scrollable panels.
+
+Sources are pluggable behind a small interface (`app/lib/research/`), so Figma
+(REST API) and Mobbin (MCP connector) can be swapped or extended. With no API
+key configured, everything gracefully falls back to a sample report.
+
 ## Run it
 
 ```bash
